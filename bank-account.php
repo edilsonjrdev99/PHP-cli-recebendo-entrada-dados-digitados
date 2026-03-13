@@ -12,7 +12,7 @@ $formatBalance = number_format($balance, 2, ",", ".");
 function printMenu($name, $formatBalance) {
   echo "\n*** --- *** --- *** ---\n";
   echo "Olá $name, bem-vindo(a) ao Banco Dev! \n";
-  echo "seu saldo é de: R$ $formatBalance \n";
+  echo "seu saldo é de: R$ $formatBalance reais.\n";
   echo "Deseja fazer alguma operação? \n\n";
   echo "1. Consultar saldo atual. \n2. Sacar valor \n3. Depositar valor \n4. Sair\n";
 }
@@ -21,18 +21,46 @@ function getTotalBalance($formatBalance) {
   echo "\nO seu saldo atual é de R$ $formatBalance reais.\n";
 }
 
-function depositValue($balance, $formatBalance) {
+function withDrawValue(&$balance, &$formatBalance) {
+  echo "Digite o valor que deseja sacar... ";
+  $value = (float) fgets(STDIN);
+
+  if($value <= 0) {
+    echo "\nO valor saque não pode ser uma string, negativo ou igual a 0.\n";
+    return;
+  }
+
+  if($value > $balance) {
+    echo "\nO valor de saque não pode ser maior que seu saldo. Saldo atual é de R$ $formatBalance.\n";
+  }
+
+  $balance       = $balance - $value;
+  $formatValue   = number_format($value, 2, ",", ".");
+  $formatBalance = number_format($balance, 2, ",", ".");
+
+  echo "\nSaque de R$ $formatValue reais realizado com sucesso! Seu novo saldo é de R$ $formatBalance reais.\n";
+}
+
+function depositValue(&$balance, &$formatBalance) {
   echo "Digite o valor que dejesa depositar... ";
 
-  $value         = (float) fgets(STDIN);
+  $value = (float) fgets(STDIN);
+
+  if($value <= 0) {
+    echo "O valor de depósito não pode ser uma string, negativo ou igual a 0.\n";
+    return;
+  }
+
   $balance      += $value;
   $formatValue   = number_format($value, 2, ",", ".");
   $formatBalance = number_format($balance, 2, ",", ".");
 
-  echo "\nSaldo de R$ $formatValue depositado com sucesso, seu novo saldo é de R$ $formatBalance reais.\n";
+  echo "\nSaldo de R$ $formatValue reais depositado com sucesso, seu novo saldo é de R$ $formatBalance reais.\n";
 }
 
 while(true) {
+  // echo "valor do value: $balance e o valor do formatBalance $formatBalance";
+
   printMenu($name, $formatBalance);
 
   // Ação
@@ -42,6 +70,10 @@ while(true) {
   switch($action) {
     case 1:
       getTotalBalance($formatBalance);
+    break;
+
+    case 2:
+      withDrawValue($balance, $formatBalance);
     break;
 
     case 3:
