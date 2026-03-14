@@ -1,20 +1,11 @@
 <?php
 
-// Exercício final do curso
-
-echo "Olá, para iniciar você deve informar seu nome! \n";
-echo "Digite seu nome... ";
-
-$name          = trim(fgets(STDIN));
-$balance       = 0;
-$formatBalance = number_format($balance, 2, ",", ".");
-
 function printMenu($name, $formatBalance) {
   echo "\n*** --- *** --- *** ---\n";
   echo "Olá $name, bem-vindo(a) ao Banco Dev! \n";
   echo "seu saldo é de: R$ $formatBalance reais.\n";
   echo "Deseja fazer alguma operação? \n\n";
-  echo "1. Consultar saldo atual. \n2. Sacar valor \n3. Depositar valor \n4. Sair\n";
+  echo "1. Consultar saldo atual. \n2. Sacar valor \n3. Depositar valor \n4. Imprimir comprovante\n5. Sair\n";
 }
 
 function getTotalBalance($formatBalance) {
@@ -32,6 +23,7 @@ function withDrawValue(&$balance, &$formatBalance) {
 
   if($value > $balance) {
     echo "\nO valor de saque não pode ser maior que seu saldo. Saldo atual é de R$ $formatBalance.\n";
+    return;
   }
 
   $balance       = $balance - $value;
@@ -58,34 +50,16 @@ function depositValue(&$balance, &$formatBalance) {
   echo "\nSaldo de R$ $formatValue reais depositado com sucesso, seu novo saldo é de R$ $formatBalance reais.\n";
 }
 
-while(true) {
-  // echo "valor do value: $balance e o valor do formatBalance $formatBalance";
+function printBalance($name, &$formatBalance) {
+  $uuid = uniqid();
+  $file = __DIR__ . "/prints/$uuid.json";
 
-  printMenu($name, $formatBalance);
+  $balanceInformation = [
+    'name'    => $name,
+    'balance' => $formatBalance
+  ];
 
-  // Ação
-  echo "Digite o número da operação... ";
-  $action = (int) fgets(STDIN);
+  file_put_contents($file, json_encode($balanceInformation));
 
-  switch($action) {
-    case 1:
-      getTotalBalance($formatBalance);
-    break;
-
-    case 2:
-      withDrawValue($balance, $formatBalance);
-    break;
-
-    case 3:
-      depositValue($balance, $formatBalance);
-    break;
-
-    case 4:
-      echo "Adeus.\n";
-      return;
-  
-    default:
-      echo "Opção inválida. \n";
-    break;
-  }
+  echo "Extrato impresso com sucesso!";
 }
