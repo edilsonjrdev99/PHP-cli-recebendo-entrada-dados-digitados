@@ -1,18 +1,18 @@
 <?php
 
-function printMenu($name, $formatBalance) {
+function printMenu(string $name, string $formatBalance): void {
   echo "\n*** --- *** --- *** ---\n";
   echo "Olá $name, bem-vindo(a) ao Banco Dev! \n";
   echo "seu saldo é de: R$ $formatBalance reais.\n";
   echo "Deseja fazer alguma operação? \n\n";
-  echo "1. Consultar saldo atual. \n2. Sacar valor \n3. Depositar valor \n4. Imprimir comprovante\n5. Sair\n";
+  echo "1. Consultar saldo atual. \n2. Sacar valor \n3. Depositar valor \n4. Imprimir extratos\n5. Ver extratos impressos\n6. Sair\n";
 }
 
-function getTotalBalance($formatBalance) {
+function getTotalBalance(string $formatBalance): void {
   echo "\nO seu saldo atual é de R$ $formatBalance reais.\n";
 }
 
-function withDrawValue(&$balance, &$formatBalance) {
+function withDrawValue(float &$balance, string &$formatBalance): void {
   echo "Digite o valor que deseja sacar... ";
   $value = (float) fgets(STDIN);
 
@@ -33,13 +33,13 @@ function withDrawValue(&$balance, &$formatBalance) {
   echo "\nSaque de R$ $formatValue reais realizado com sucesso! Seu novo saldo é de R$ $formatBalance reais.\n";
 }
 
-function depositValue(&$balance, &$formatBalance) {
+function depositValue(float &$balance, string &$formatBalance): void {
   echo "Digite o valor que dejesa depositar... ";
 
   $value = (float) fgets(STDIN);
 
   if($value <= 0) {
-    echo "O valor de depósito não pode ser uma string, negativo ou igual a 0.\n";
+    echo "\nO valor de depósito não pode ser uma string, negativo ou igual a 0.\n";
     return;
   }
 
@@ -50,16 +50,36 @@ function depositValue(&$balance, &$formatBalance) {
   echo "\nSaldo de R$ $formatValue reais depositado com sucesso, seu novo saldo é de R$ $formatBalance reais.\n";
 }
 
-function printBalance($name, &$formatBalance) {
+function printBalance(string $name, string &$formatBalance): void {
   $uuid = uniqid();
   $file = __DIR__ . "/prints/$uuid.json";
 
   $balanceInformation = [
     'name'    => $name,
-    'balance' => $formatBalance
+    'balance' => $formatBalance,
+    'date'    => date("d/m/Y")
   ];
 
   file_put_contents($file, json_encode($balanceInformation));
 
-  echo "Extrato impresso com sucesso!";
+  echo "\nExtrato impresso com sucesso!\n";
+}
+
+function getAllBalancePrints() {
+  $filesPath = __DIR__ . "/prints/*.json";
+  $files     = glob($filesPath);
+
+  if(empty($files)) {
+    echo "\nNão possui extratos.\n";
+    return;
+  }
+
+  foreach($files as $file) {
+    echo "\nExtratos retirados\n";
+    
+    $printBalance = json_decode(file_get_contents($file), true);
+
+    echo "Data - " . $printBalance['date'] . "\n";
+    echo "Nome: " . $printBalance['name'] . ", valor R$ " . $printBalance['balance'] . "\n";
+  }
 }

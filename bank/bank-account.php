@@ -11,7 +11,7 @@ $balance       = 0;
 $formatBalance = number_format($balance, 2, ",", ".");
 
 while(true) {
-  
+
   printMenu($name, $formatBalance);
 
   // Ação
@@ -32,15 +32,19 @@ while(true) {
     break;
 
     case 4:
-      echo printBalance($name, $formatBalance);
-      return;
+      printBalance($name, $formatBalance);
+    break;
 
     case 5:
+      getAllBalancePrints();
+    break;
+
+    case 6:
       echo "Adeus.\n";
-      return;
+    return;
   
     default:
-      echo "Opção inválida. \n";
+      echo "\nOpção inválida. \n";
     break;
   }
 }

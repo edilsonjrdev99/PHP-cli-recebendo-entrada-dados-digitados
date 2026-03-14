@@ -1,0 +1,5 @@
+# Cache do mac
+.DS_Store
+
+# Arquivos gerados por impressão de comprovantes
+bank/prints/*
