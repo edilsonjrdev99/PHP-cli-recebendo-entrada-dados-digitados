@@ -4,7 +4,11 @@ Projeto em php com exemplos de funções que possibilitam entrada de dados via p
 
 ### Como rodar os arquivos
 
-- **arquivo de filmes:** `php index.php "nome do filme" 2025 9 5 9`
+- **arquivo de filmes:** `php index.php "nome do filme" 2025 9 5 9`, ordem dos parametros:
+- Nome do filme (string)
+- Ano de lançamento do filme (int)
+- Notas de avaliações do filme separados por espaço, pode por a quantidade que quiser (int)
+
 - **Arquivo de conta de banco:** `php band/bank-account.php` esse arquivo vai imprimir instrições no terminal para o usuário poder realizar operações em uma conta bancária fictícia, como depositar, sacar, visualizar saldo, imprimir saldo...
 
 ![Exemplo de imagem](./bank/example-image.jpeg)
